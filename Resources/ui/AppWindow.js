@@ -3,8 +3,8 @@ function AppWindow(title, postsLoader) {
 	var ExternalLinkWindow = require('ui/ExternalLinkWindow');
 	var ROW_BACKGROUND_IMAGE_URL = '/images/bg-row.png';
 	var INT_LEFT = 10;
-	var CHARS_PER_ROW = 45;
-	
+	var CHARS_PER_ROW = 47;
+
 	var self = Ti.UI.createWindow({
 		title : title,
 		backgroundColor : 'white'
@@ -13,29 +13,51 @@ function AppWindow(title, postsLoader) {
 	// create table view to show the results.
 	var tableview = Titanium.UI.createTableView();
 
+	function chr(code) {
+		return String.fromCharCode(code);
+	}
+
+	function fixSpecialChars(text) {
+		var charmap = {
+			'&euro;&trade;' : '\'', // Right-apostrophe (eg in I'm)
+			'&euro;&oelig;' : '"', // Opening speech mark
+			'&euro;&ldquo;' : '-', // Long dash
+			'&euro;' : '"', // Closing speech mark
+			'&Atilde;&copy;' : '&eacute;', // e acute accent
+			'â€™' : '\'', // Right-apostrophe again
+			'â€œ' : '"', // Left-smart quote
+			'â€' : '"', // Right-smart quote
+			'&amp;' : '&', //ampersand
+			'â€¦' : '…' // ellipse
+		};
+		// Right-apostrophe again
+		charmap[chr(226) + chr(128) + chr(153)] = '"';
+		// Long dash again
+		charmap[chr(226) + chr(128) + chr(147)] = '-';
+		// Opening speech mark
+		charmap[chr(226) + chr(128) + chr(156)] = '"';
+		// M dash again
+		charmap[chr(226) + chr(128) + chr(148)] = '-';
+		// Right speech mark
+		charmap[chr(226) + chr(128)] = '"';
+		// e acute again
+		charmap[chr(195) + chr(169)] = '&eacute';
+
+		for(var index in charmap) {
+			text = text.replace(index, charmap[index]);
+		}
+		return text;
+	};
+
 	function PostRow(post) {
-		/*
-		 var row = Ti.UI.createTableViewRow({
-		 title: post.title,
-		 backgroundImage : ROW_BACKGROUND_IMAGE_URL,
-		 color: 'black',
-		 height: 100
-		 // selectedBackgroundImage : ROW_SELECTED_BACKGROUND_IMAGE_URL
-		 });
-		 if (post.thumbnail) {
-		 row.leftImage = post.thumbnail;
-		 }
-		 row.post = post;
-		 return row;*/
-		
-		if (post.title.length > 2*CHARS_PER_ROW - 6) {
-			post.title = post.title.substring(0,CHARS_PER_ROW*2 - 6);
+		if(post.title.length > 2 * CHARS_PER_ROW - 10) {
+			post.title = post.title.substring(0, CHARS_PER_ROW * 2 - 10);
 			post.title += '...';
 		}
-		
+
 		var row = Ti.UI.createTableViewRow();
 		row.selectedBackgroundColor = '#fff';
-		row.height = (post.title.length/CHARS_PER_ROW >= 1)?110:70;
+		// row.height = (post.title.length/CHARS_PER_ROW >= 1)?110:70;
 		row.className = 'datarow';
 		row.clickName = 'row';
 
@@ -62,16 +84,16 @@ function AppWindow(title, postsLoader) {
 				fontWeight : 'normal',
 				fontFamily : 'Arial'
 			},
-			top : 2,
-			left: INT_LEFT,
-			text : post.title
+			bottom : 30,
+			left : INT_LEFT,
+			text : fixSpecialChars(post.title)
 		});
 		row.add(title);
 
 		var calendar = Ti.UI.createView({
 			backgroundImage : '/images/eventsButton.png',
 			bottom : 2,
-			right: 110,
+			right : 110,
 			width : 32,
 			height : 32
 		});
@@ -86,8 +108,8 @@ function AppWindow(title, postsLoader) {
 			},
 			bottom : 5,
 			height : 20,
-			right: 10,
-			width: 100,
+			right : 10,
+			width : 100,
 			text : post.time
 		});
 		row.add(date);
