@@ -19,8 +19,8 @@ function Feedburner(url) {
 						id : -1, 
 						commentCount : -1, 
 						points : -1,
-						postedAgo : postData.publishedDate,
-						postedBy : postData.author,
+						time : postData.publishedDate,
+						user : postData.author,
 						snippet : postData.contentSnippet
 					});
 				};

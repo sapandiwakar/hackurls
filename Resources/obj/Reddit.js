@@ -1,4 +1,4 @@
-function Reddit(url) {
+function Reddit(url, type) {
 
 	var STR_REDDITBASE = 'http://www.reddit.com'
 	this.getPosts = function(callback) {
@@ -16,8 +16,10 @@ function Reddit(url) {
 						id : postData.id,
 						commentCount : postData.num_comments,
 						points : postData.score,
-						postedAgo : postData.created_utc,
-						postedBy : postData.author
+						time : postData.created_utc,
+						user : postData.author,
+						thumbnail : postData.thumbnail,
+						details : (type==='proggit')?postData.domain:postData.subreddit
 					});
 				};
 				Ti.API.log(items);

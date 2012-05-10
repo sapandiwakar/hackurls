@@ -1,7 +1,10 @@
 function AppWindow(title, postsLoader) {
 
 	var ExternalLinkWindow = require('ui/ExternalLinkWindow');
-
+	var ROW_BACKGROUND_IMAGE_URL = '/images/bg-row.png';
+	var INT_LEFT = 10;
+	var CHARS_PER_ROW = 45;
+	
 	var self = Ti.UI.createWindow({
 		title : title,
 		backgroundColor : 'white'
@@ -11,12 +14,84 @@ function AppWindow(title, postsLoader) {
 	var tableview = Titanium.UI.createTableView();
 
 	function PostRow(post) {
-		var row = Ti.UI.createTableViewRow({
-			// hasChild : true,
-			// backgroundImage : ROW_BACKGROUND_IMAGE_URL,
-			// selectedBackgroundImage : ROW_SELECTED_BACKGROUND_IMAGE_URL
+		/*
+		 var row = Ti.UI.createTableViewRow({
+		 title: post.title,
+		 backgroundImage : ROW_BACKGROUND_IMAGE_URL,
+		 color: 'black',
+		 height: 100
+		 // selectedBackgroundImage : ROW_SELECTED_BACKGROUND_IMAGE_URL
+		 });
+		 if (post.thumbnail) {
+		 row.leftImage = post.thumbnail;
+		 }
+		 row.post = post;
+		 return row;*/
+		
+		if (post.title.length > 2*CHARS_PER_ROW - 6) {
+			post.title = post.title.substring(0,CHARS_PER_ROW*2 - 6);
+			post.title += '...';
+		}
+		
+		var row = Ti.UI.createTableViewRow();
+		row.selectedBackgroundColor = '#fff';
+		row.height = (post.title.length/CHARS_PER_ROW >= 1)?110:70;
+		row.className = 'datarow';
+		row.clickName = 'row';
+
+		Ti.API.info('details: ' + post.details);
+		var details = Ti.UI.createLabel({
+			color : '#576996',
+			font : {
+				fontSize : 16,
+				fontWeight : 'bold',
+				fontFamily : 'Arial'
+			},
+			left : INT_LEFT,
+			bottom : 2,
+			text : post.details
 		});
-		row.title = post.title;
+
+		row.add(details);
+
+		var fontSize = 22;
+		var title = Ti.UI.createLabel({
+			color : '#222',
+			font : {
+				fontSize : fontSize,
+				fontWeight : 'normal',
+				fontFamily : 'Arial'
+			},
+			top : 2,
+			left: INT_LEFT,
+			text : post.title
+		});
+		row.add(title);
+
+		var calendar = Ti.UI.createView({
+			backgroundImage : '/images/eventsButton.png',
+			bottom : 2,
+			right: 110,
+			width : 32,
+			height : 32
+		});
+		row.add(calendar);
+
+		var date = Ti.UI.createLabel({
+			color : '#999',
+			font : {
+				fontSize : 13,
+				fontWeight : 'normal',
+				fontFamily : 'Arial'
+			},
+			bottom : 5,
+			height : 20,
+			right: 10,
+			width: 100,
+			text : post.time
+		});
+		row.add(date);
+
 		row.post = post;
 		return row;
 	}
@@ -29,6 +104,7 @@ function AppWindow(title, postsLoader) {
 		};
 		tableview.setData(data);
 	}
+
 
 	postsLoader.getPosts(loadPosts);
 

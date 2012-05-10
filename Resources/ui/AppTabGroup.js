@@ -19,8 +19,8 @@ function AppTabGroup() {
 	var hackernews = new HackerNews();
 	
 	var Reddit = require('obj/Reddit');
-	var reddit = new Reddit(STR_REDDIT_URL);
-	var proggit = new Reddit(STR_PROGGIT_URL);
+	var reddit = new Reddit(STR_REDDIT_URL, 'reddit');
+	var proggit = new Reddit(STR_PROGGIT_URL, 'proggit');
 	
 	var Dzone = require('obj/Dzone');
 	var dzone = new Dzone();

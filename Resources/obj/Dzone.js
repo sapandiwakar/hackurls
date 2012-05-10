@@ -1,11 +1,12 @@
 function DZone() {
 
 	var STR_DZONE_URL = 'http://dzone-api.heroku.com/items.json';
-	
+
 	function getDZoneScore(clicks, voteups, votedowns) {
 		return clicks;
 	}
-	
+
+
 	this.getPosts = function(callback) {
 		var xhr = Titanium.Network.createHTTPClient();
 
@@ -21,8 +22,9 @@ function DZone() {
 						id : postData.id,
 						commentCount : postData.comments,
 						points : getDZoneScore(postData.clicks, postData.vote_up, postData.vote_down),
-						postedAgo : postData.publishing_date,
-						postedBy : postData.submitter_name
+						time : postData.publishing_date,
+						user : postData.submitter_name,
+						thumbnail : postData.thumbnail
 					});
 				};
 				callback.call(this, items);
