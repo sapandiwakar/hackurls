@@ -1,6 +1,11 @@
 function AppTabGroup() {
 	
-	var STR_SLASHDOT_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://feeds.feedburner.com/slashdot/?format=xml'; // Use google feed api to convert xml to json
+	// xml feeds. Use google feed api to convert xml to json
+	var STR_SLASHDOT_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://feeds.feedburner.com/slashdot/?format=xml'; 
+	var STR_TECHMEME_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://www.techmeme.com/feed.xml';
+	var STR_WIRED_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://feeds.wired.com/wired/index?format=xml';
+	
+	// json feeds 
 	var STR_REDDIT_URL = 'http://www.reddit.com/hot.json';
 	var STR_PROGGIT_URL = 'http://www.reddit.com/r/programming/hot.json';
 	
@@ -22,6 +27,8 @@ function AppTabGroup() {
 	
 	var Feedburner = require('obj/Feedburner');
 	var slashdot = new Feedburner(STR_SLASHDOT_URL);
+	var techmeme = new Feedburner(STR_TECHMEME_URL);
+	var wired = new Feedburner(STR_WIRED_URL);
 
 	//create app tabs
 	var win1 = new AppWindow(L('hackernews'), hackernews);
@@ -29,6 +36,8 @@ function AppTabGroup() {
 	var win3 = new AppWindow(L('proggit'), proggit);
 	var win4 = new AppWindow(L('dzone'), dzone);
 	var win5 = new AppWindow(L('slashdot'), slashdot);
+	var win6 = new AppWindow(L('techmeme'), techmeme);
+	var win7 = new AppWindow(L('wired'), wired);
 
 	var tab1 = Ti.UI.createTab({
 		title : L('hackernews'),
@@ -64,12 +73,28 @@ function AppTabGroup() {
 		window : win5
 	});
 	win5.containingTab = tab5;
+	
+	var tab6 = Ti.UI.createTab({
+		title : L('techmeme'),
+		icon : '/images/KS_nav_views.png',
+		window : win6
+	});
+	win6.containingTab = tab6;
+	
+	var tab7 = Ti.UI.createTab({
+		title : L('wired'),
+		icon : '/images/KS_nav_views.png',
+		window : win7
+	});
+	win7.containingTab = tab7;
 
 	self.addTab(tab1);
 	self.addTab(tab2);
 	self.addTab(tab3);
 	self.addTab(tab4);
 	self.addTab(tab5);
+	self.addTab(tab6);
+	self.addTab(tab7);
 
 	return self;
 };

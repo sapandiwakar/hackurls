@@ -9,5 +9,7 @@
 	<string name="reddit">Reddit</string>
 	<string name="proggit">Proggit</string>
 	<string name="dzone">dzone</string>
-	<string name="slashdot">slashdot</string>
+	<string name="slashdot">Slashdot</string>
+	<string name="techmeme">Techmeme</string>
+	<string name="wired">Wired</string>
 </resources>
