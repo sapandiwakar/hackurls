@@ -1,5 +1,7 @@
 function HackerNews() {
 
+	var STR_HN_URL = 'http://api.ihackernews.com/page';
+
 	this.getPosts = function(callback) {
 		var xhr = Titanium.Network.createHTTPClient();
 
@@ -7,12 +9,12 @@ function HackerNews() {
 			Ti.API.info(this.responseText);
 			var parsedJson = JSON.parse(this.responseText);
 			Ti.API.info(parsedJson);
-			if (parsedJson !== undefined && parsedJson.items !== undefined) {
+			if(parsedJson !== undefined && parsedJson.items !== undefined) {
 				callback.call(this, parsedJson.items);
 			}
 		};
 		// open the client
-		xhr.open('GET', 'http://api.ihackernews.com/page');
+		xhr.open('GET', STR_HN_URL);
 
 		// send the data
 		xhr.send();
