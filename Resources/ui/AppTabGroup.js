@@ -1,4 +1,9 @@
 function AppTabGroup() {
+	
+	var STR_SLASHDOT_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://feeds.feedburner.com/slashdot/?format=xml'; // Use google feed api to convert xml to json
+	var STR_REDDIT_URL = 'http://www.reddit.com/hot.json';
+	var STR_PROGGIT_URL = 'http://www.reddit.com/r/programming/hot.json';
+	
 	//declare module dependencies
 	var AppWindow = require('ui/AppWindow');
 
@@ -7,17 +12,23 @@ function AppTabGroup() {
 
 	var HackerNews = require('obj/HackerNews');
 	var hackernews = new HackerNews();
+	
 	var Reddit = require('obj/Reddit');
-	var reddit = new Reddit('http://www.reddit.com/hot.json');
-	var proggit = new Reddit('http://www.reddit.com/r/programming/hot.json');
+	var reddit = new Reddit(STR_REDDIT_URL);
+	var proggit = new Reddit(STR_PROGGIT_URL);
+	
 	var Dzone = require('obj/Dzone');
 	var dzone = new Dzone();
+	
+	var Feedburner = require('obj/Feedburner');
+	var slashdot = new Feedburner(STR_SLASHDOT_URL);
 
 	//create app tabs
 	var win1 = new AppWindow(L('hackernews'), hackernews);
 	var win2 = new AppWindow(L('reddit'), reddit);
 	var win3 = new AppWindow(L('proggit'), proggit);
 	var win4 = new AppWindow(L('dzone'), dzone);
+	var win5 = new AppWindow(L('slashdot'), slashdot);
 
 	var tab1 = Ti.UI.createTab({
 		title : L('hackernews'),
@@ -46,11 +57,19 @@ function AppTabGroup() {
 		window : win4
 	});
 	win4.containingTab = tab4;
+	
+	var tab5 = Ti.UI.createTab({
+		title : L('slashdot'),
+		icon : '/images/KS_nav_views.png',
+		window : win5
+	});
+	win5.containingTab = tab5;
 
 	self.addTab(tab1);
 	self.addTab(tab2);
 	self.addTab(tab3);
 	self.addTab(tab4);
+	self.addTab(tab5);
 
 	return self;
 };
