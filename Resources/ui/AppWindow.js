@@ -37,6 +37,7 @@ function AppWindow(title, postsLoader) {
 	};
 
 	function PostRow(post) {
+		// Truncate long titles
 		if(post.title.length > 2 * CHARS_PER_ROW - 10) {
 			post.title = post.title.substring(0, CHARS_PER_ROW * 2 - 10);
 			post.title += '...';
@@ -71,7 +72,7 @@ function AppWindow(title, postsLoader) {
 				fontWeight : 'normal',
 				fontFamily : 'Arial'
 			},
-			bottom : 30,
+			bottom : 35,
 			left : INT_LEFT,
 			text : fixSpecialChars(post.title)
 		});
@@ -90,7 +91,6 @@ function AppWindow(title, postsLoader) {
 		if(post.timetype === 'timestamp') {
 			postedAgo = commonUtils.prettyDateFromDate(new Date(post.time * 1000));
 		} else if (post.timetype === 'datetime') {
-			Ti.API.info(post.time + ' -> ' + new Date(post.time));
 			postedAgo = commonUtils.prettyDateFromDate(new Date(post.time));
 		}
 
