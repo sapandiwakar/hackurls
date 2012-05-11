@@ -22,28 +22,13 @@ function AppWindow(title, postsLoader) {
 			'&euro;&trade;' : '\'', // Right-apostrophe (eg in I'm)
 			'&euro;&oelig;' : '"', // Opening speech mark
 			'&euro;&ldquo;' : '-', // Long dash
+			'&euro;?' : '"', // Closing speech mark
 			'&euro;' : '"', // Closing speech mark
-			'&Atilde;&copy;' : '&eacute;', // e acute accent
-			'â€™' : '\'', // Right-apostrophe again
-			'â€œ' : '"', // Left-smart quote
-			'â€' : '"', // Right-smart quote
-			'&amp;' : '&', //ampersand
-			'â€¦' : '…' // ellipse
+			'&amp;' : '&' //ampersand
 		};
-		// Right-apostrophe again
-		charmap[chr(226) + chr(128) + chr(153)] = '"';
-		// Long dash again
-		charmap[chr(226) + chr(128) + chr(147)] = '-';
-		// Opening speech mark
-		charmap[chr(226) + chr(128) + chr(156)] = '"';
-		// M dash again
-		charmap[chr(226) + chr(128) + chr(148)] = '-';
-		// Right speech mark
-		charmap[chr(226) + chr(128)] = '"';
-		// e acute again
-		charmap[chr(195) + chr(169)] = '&eacute';
-
+		
 		for(var index in charmap) {
+			Ti.API.info(index + " : " + charmap[index]);
 			text = text.replace(index, charmap[index]);
 		}
 		return text;
