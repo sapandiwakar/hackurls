@@ -1,5 +1,6 @@
 function DZone() {
 
+	// Dzone api is not maintained anymore. Using feedburner instead
 	var STR_DZONE_URL = 'http://dzone-api.heroku.com/items.json';
 
 	function getDZoneScore(clicks, voteups, votedowns) {
@@ -23,6 +24,7 @@ function DZone() {
 						commentCount : postData.comments,
 						points : getDZoneScore(postData.clicks, postData.vote_up, postData.vote_down),
 						time : postData.publishing_date,
+						timetype : 'datetime',
 						user : postData.submitter_name,
 						thumbnail : postData.thumbnail
 					});

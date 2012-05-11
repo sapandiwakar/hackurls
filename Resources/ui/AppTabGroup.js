@@ -4,6 +4,7 @@ function AppTabGroup() {
 	var STR_SLASHDOT_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://feeds.feedburner.com/slashdot/?format=xml'; 
 	var STR_TECHMEME_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://www.techmeme.com/feed.xml';
 	var STR_WIRED_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://feeds.wired.com/wired/index?format=xml';
+	var STR_DZONE_URL = 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://feeds.dzone.com/dzone/frontpage?format=xml';
 	
 	// json feeds 
 	var STR_REDDIT_URL = 'http://www.reddit.com/hot.json';
@@ -22,13 +23,11 @@ function AppTabGroup() {
 	var reddit = new Reddit(STR_REDDIT_URL, 'reddit');
 	var proggit = new Reddit(STR_PROGGIT_URL, 'proggit');
 	
-	var Dzone = require('obj/Dzone');
-	var dzone = new Dzone();
-	
 	var Feedburner = require('obj/Feedburner');
 	var slashdot = new Feedburner(STR_SLASHDOT_URL);
 	var techmeme = new Feedburner(STR_TECHMEME_URL);
 	var wired = new Feedburner(STR_WIRED_URL);
+	var dzone = new Feedburner(STR_DZONE_URL);
 
 	//create app tabs
 	var win1 = new AppWindow(L('hackernews'), hackernews);

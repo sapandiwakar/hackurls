@@ -1,6 +1,9 @@
 function AppWindow(title, postsLoader) {
 
 	var ExternalLinkWindow = require('ui/ExternalLinkWindow');
+	var CommonUtils = require('util/CommonUtils');
+	var commonUtils = new CommonUtils();
+	
 	var ROW_BACKGROUND_IMAGE_URL = '/images/bg-row.png';
 	var INT_LEFT = 10;
 	var CHARS_PER_ROW = 47;
@@ -26,9 +29,8 @@ function AppWindow(title, postsLoader) {
 			'&euro;' : '"', // Closing speech mark
 			'&amp;' : '&' //ampersand
 		};
-		
+
 		for(var index in charmap) {
-			Ti.API.info(index + " : " + charmap[index]);
 			text = text.replace(index, charmap[index]);
 		}
 		return text;
@@ -84,6 +86,14 @@ function AppWindow(title, postsLoader) {
 		});
 		row.add(calendar);
 
+		var postedAgo = post.time;
+		if(post.timetype === 'timestamp') {
+			postedAgo = commonUtils.prettyDateFromDate(new Date(post.time * 1000));
+		} else if (post.timetype === 'datetime') {
+			Ti.API.info(post.time + ' -> ' + new Date(post.time));
+			postedAgo = commonUtils.prettyDateFromDate(new Date(post.time));
+		}
+
 		var date = Ti.UI.createLabel({
 			color : '#999',
 			font : {
@@ -95,7 +105,7 @@ function AppWindow(title, postsLoader) {
 			height : 20,
 			right : 10,
 			width : 100,
-			text : post.time
+			text : postedAgo
 		});
 		row.add(date);
 

@@ -17,6 +17,7 @@ function Reddit(url, type) {
 						commentCount : postData.num_comments,
 						points : postData.score,
 						time : postData.created_utc,
+						timetype : 'timestamp',
 						user : postData.author,
 						thumbnail : postData.thumbnail,
 						details : (type==='proggit')?postData.domain:postData.subreddit

@@ -20,6 +20,7 @@ function Feedburner(url) {
 						commentCount : -1, 
 						points : -1,
 						time : postData.publishedDate,
+						timetype : 'datetime',
 						user : postData.author,
 						snippet : postData.contentSnippet
 					});

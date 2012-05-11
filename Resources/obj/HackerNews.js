@@ -31,6 +31,7 @@ function HackerNews() {
 						id : post.item_id,
 						commentCount : post.comments,
 						time : post.time,
+						timetype : 'pretty',
 						details : domain,
 						user : post.user,
 						points : post.score,
