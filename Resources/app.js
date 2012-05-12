@@ -10,6 +10,12 @@
  *  
  */
 
+
+if(Titanium.Network.networkType == Titanium.Network.NETWORK_NONE){
+	alert('Unable to retrieve posts at this time. Please try again later!'); 
+}
+
+
 //bootstrap and check dependencies
 if (Ti.version < 1.8 ) {
 	alert('Sorry - this application template requires Titanium Mobile SDK 1.8 or later');

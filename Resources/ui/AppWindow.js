@@ -3,7 +3,7 @@ function AppWindow(title, postsLoader) {
 	var ExternalLinkWindow = require('ui/ExternalLinkWindow');
 	var CommonUtils = require('util/CommonUtils');
 	var commonUtils = new CommonUtils();
-	
+
 	var ROW_BACKGROUND_IMAGE_URL = '/images/bg-row.png';
 	var INT_LEFT = 10;
 	var CHARS_PER_ROW = 47;
@@ -13,8 +13,72 @@ function AppWindow(title, postsLoader) {
 		backgroundColor : 'white'
 	});
 
+	var activity = self.activity;
+
+	activity.onCreateOptionsMenu = function(e) {
+		var menu = e.menu;
+		var menuItem = menu.add({
+			title : "Item 1"
+		});
+		// menuItem.setIcon("item1.png");
+		menuItem.addEventListener("click", function(e) {
+			Ti.API.debug("I was clicked");
+		});
+	};
+
+	/**
+	 * Adds "swipe" event support to Android, and adds swipe up and down to iOS.
+	 * @param view The view that should be made swipeable.
+	 * @param allowVertical Whether or not vertical swipes (up and down) are allowed; default is false.
+	 * @param tolerance How much further you need to go in a particular direction before swipe is fired; default is 2.
+	 */
+	function makeSwipeable(view, allowVertical, tolerance) {
+		Ti.API.info('make swipeable called');
+
+		tolerance = tolerance || 2;
+		var start;
+		view.addEventListener('touchstart', function(evt) {
+			start = evt;
+		});
+		view.addEventListener('touchend', function(end) {
+			var dx = end.x - start.x, dy = end.y - start.y;
+			var dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+			// only trigger if dragged further than 50 pixels
+			if(dist < 50) {
+				return;
+			}
+			var isVertical = Math.abs(dx / dy) < 1 / tolerance;
+			var isHorizontal = Math.abs(dy / dx) < 1 / tolerance;
+			// only trigger if dragged in a particular direction
+			if(!isVertical && !isHorizontal) {
+				return;
+			}
+			// disallow vertical swipe, depending on the setting
+			if(!allowVertical && isVertical) {
+				return;
+			}
+			// now fire the event off so regular 'swipe' handlers can use this!
+			end.direction = isHorizontal ? ((dx < 0) ? 'left' : 'right') : ((dy < 0) ? 'up' : 'down');
+			end.type = 'swipe';
+			Ti.API.info('firing swipe');
+			view.fireEvent('swipe', end);
+		});
+	}
+
 	// create table view to show the results.
 	var tableview = Titanium.UI.createTableView();
+
+	/**
+	 * Now call the function on our window, and we'll enable vertical swipes while we're at it.
+	 */
+	makeSwipeable(tableview, true);
+
+	/**
+	 * Now add a regular event listener for "swipe". It will work cross platform!
+	 */
+	tableview.addEventListener('swipe', function(evt) {
+		alert('Swiped ' + evt.direction + '!');
+	});
 
 	function chr(code) {
 		return String.fromCharCode(code);
@@ -79,9 +143,9 @@ function AppWindow(title, postsLoader) {
 		row.add(title);
 
 		var calendar = Ti.UI.createView({
-			backgroundImage : '/images/eventsButton.png',
+			backgroundImage : '/images/posetdHoursAgo.png',
 			bottom : 2,
-			right : 110,
+			right : 115,
 			width : 32,
 			height : 32
 		});
@@ -90,7 +154,7 @@ function AppWindow(title, postsLoader) {
 		var postedAgo = post.time;
 		if(post.timetype === 'timestamp') {
 			postedAgo = commonUtils.prettyDateFromDate(new Date(post.time * 1000));
-		} else if (post.timetype === 'datetime') {
+		} else if(post.timetype === 'datetime') {
 			postedAgo = commonUtils.prettyDateFromDate(new Date(post.time));
 		}
 
