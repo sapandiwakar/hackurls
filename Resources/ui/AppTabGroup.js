@@ -21,7 +21,10 @@ function AppTabGroup() {
 
 	// Modules
 	var BOO_SHOW_DZONE = false;
-	
+
+	// Constants
+	var INT_NUM_APPS = 6;
+
 	//declare module dependencies
 	var AppWindow = require('ui/AppWindow');
 
@@ -66,7 +69,7 @@ function AppTabGroup() {
 
 	var tab3 = Ti.UI.createTab({
 		title : L('proggit'),
-		icon : STR_PROGGIT_IMAGE_URL, //TODO
+		icon : STR_PROGGIT_IMAGE_URL,
 		window : win3
 	});
 	win3.containingTab = tab3;
@@ -89,14 +92,14 @@ function AppTabGroup() {
 
 	var tab6 = Ti.UI.createTab({
 		title : L('techmeme'),
-		icon : STR_TECHMEME_IMAGE_URL, // TODO
+		icon : STR_TECHMEME_IMAGE_URL,
 		window : win6
 	});
 	win6.containingTab = tab6;
 
 	var tab7 = Ti.UI.createTab({
 		title : L('wired'),
-		icon : STR_WIRED_IMAGE_URL, // TODO
+		icon : STR_WIRED_IMAGE_URL,
 		window : win7
 	});
 	win7.containingTab = tab7;
@@ -104,12 +107,14 @@ function AppTabGroup() {
 	self.addTab(tab1);
 	self.addTab(tab2);
 	self.addTab(tab3);
+	
 	if(BOO_SHOW_DZONE)
 		self.addTab(tab4);
+
 	self.addTab(tab5);
 	self.addTab(tab6);
 	self.addTab(tab7);
-
+	
 	return self;
 };
 

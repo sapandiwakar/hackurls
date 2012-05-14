@@ -5,24 +5,82 @@ function AppWindow(title, postsLoader) {
 	var commonUtils = new CommonUtils();
 
 	var ROW_BACKGROUND_IMAGE_URL = '/images/bg-row.png';
+	var REFRESH_IMAGE_URL = '/images/refresh.png';
+	var FEEDBACK_IMAGE_URL = '/images/feedback.png';
+	var ABOUT_US_IMAGE_URL = '/images/aboutUs.png';
 	var INT_LEFT = 10;
 	var CHARS_PER_ROW = 47;
 
+	var aboutUs = 'Sapan Diwakar:\ndiwakar.sapan@gmail.com\nPulkit Goyal:\npulkit110@gmail.com\n Ferhat Elmas:\nelmas.ferhat@gmail.com \n';
 	var self = Ti.UI.createWindow({
 		title : title,
 		backgroundColor : 'white'
 	});
 
+	// For application menu
 	var activity = self.activity;
-
 	activity.onCreateOptionsMenu = function(e) {
 		var menu = e.menu;
-		var menuItem = menu.add({
-			title : "Item 1"
+		var refreshItem = menu.add({
+			title : "Refresh"
 		});
-		// menuItem.setIcon("item1.png");
-		menuItem.addEventListener("click", function(e) {
-			Ti.API.debug("I was clicked");
+		refreshItem.setIcon(REFRESH_IMAGE_URL);
+		refreshItem.addEventListener("click", function(e) {
+			beginLoadPosts();
+		});
+
+		var feedbackItem = menu.add({
+			title : "Feedback"
+		});
+		feedbackItem.setIcon(FEEDBACK_IMAGE_URL);
+		feedbackItem.addEventListener("click", function(e) {
+
+			var emailDialog = Titanium.UI.createEmailDialog();
+			if(!emailDialog.isSupported()) {
+				Ti.UI.createAlertDialog({
+					title : 'Error',
+					message : 'Email not available'
+				}).show();
+				return;
+			}
+			emailDialog.setSubject('Feedback');
+			emailDialog.setToRecipients(['android-support-hackurls@gmail.com']);
+
+			emailDialog.setMessageBody('Enter your comments here..');
+
+			emailDialog.addEventListener('complete', function(e) {
+				if(e.result == emailDialog.SENT) {
+					// Create a notification
+					var n = Ti.UI.createNotification({
+						message : 'Thanks for your feedback. '
+					});
+					// Set the duration to either Ti.UI.NOTIFICATION_DURATION_LONG or NOTIFICATION_DURATION_SHORT
+					n.duration = Ti.UI.NOTIFICATION_DURATION_LONG;
+
+					// Setup the X & Y Offsets
+					n.offsetX = 100;
+					n.offsetY = 75;
+					n.show();
+				} else {
+					alert("Unable to send message at this time.");
+				}
+			});
+			emailDialog.open();
+
+		});
+
+		var aboutUsItem = menu.add({
+			title : "About Us"
+		});
+
+		aboutUsItem.setIcon(ABOUT_US_IMAGE_URL);
+		aboutUsItem.addEventListener("click", function(e) {
+			var alertDialog = Titanium.UI.createAlertDialog({
+				title : 'Hack Url Reader',
+				message : aboutUs,
+				buttonNames : ['OK']
+			});
+			alertDialog.show();
 		});
 	};
 
@@ -178,16 +236,30 @@ function AppWindow(title, postsLoader) {
 	}
 
 	function loadPosts(arr_posts) {
+		if(!arr_posts)
+			return;
+
 		data = [];
 		for(var i = 0, j = arr_posts.length; i < j; i++) {
 			var post = arr_posts[i];
 			data.push(new PostRow(post));
 		};
 		tableview.setData(data);
+		Titanium.App.Properties.setList("cacheData", arr_posts);
+		Ti.App.fireEvent('LoadComplete');
 	}
 
+	function beginLoadPosts() {
+		if(!Titanium.Network.online) {
+			var arr_posts = Titanium.App.Properties.getList("cacheData");
+			loadPosts(arr_posts);
+		} else {
+			Ti.API.info('Loading from internet');
+			postsLoader.getPosts(loadPosts);
+		}
+	}
 
-	postsLoader.getPosts(loadPosts);
+	beginLoadPosts();
 
 	// Open the post in a new window
 	tableview.addEventListener('click', function(e) {
